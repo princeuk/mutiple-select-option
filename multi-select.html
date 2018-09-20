@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>:: Tab ::</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+   </head>
+   <body>
+
+   <div class="container">
+		<div class="list_sec"> 
+		  <ul>
+			 <li uk="Classic" ukID="PreferedClothes">
+            <div class="list_txt">Classic</div>
+              <div class="list_box">
+					    <label class="circle-color">
+						  <input type="checkbox" value="Classic" id="PreferedClothes" name="ClothesType">
+						  <span class="checkmark"></span>
+						</label>
+                  </div>
+             </li>
+
+             <li uk="Casual" ukID="PreferedClothes">
+                  <div class="list_txt">Casual</div>
+                  <div class="list_box">
+                     <label class="circle-color">
+						  <input type="checkbox" value="Casual" id="PreferedClothes" name="ClothesType">
+						  <span class="checkmark"></span>
+						</label>
+                 </div>
+             </li>
+             <li uk="Both" ukID="PreferedClothes">
+                  <div class="list_txt">Both</div>
+                  <div class="list_box">
+                         <label class="circle-color">
+						  <input type="checkbox" value="Both" id="PreferedClothes" name="ClothesType">
+						  <span class="checkmark"></span>
+						</label>
+                   </div>
+             </li>
+		  </ul>
+      <input type="hidden" id="PreferedClothesHDN" name="customer[note][ClothesType][]" value="" />
+      <span class="addAllHidden" style="display:none;"></span>
+      
+		</div>
+
+	  </div>
+	  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+
+<script>
+function chekBox(){
+
+   $('select.select').each(function(){
+      var title = $(this).attr('title');
+      if( $('option:selected', this).val() != ''  ) title = $('option:selected',this).text();
+      $(this)
+      .css({'z-index':10,'opacity':0,'-khtml-appearance':'none'})
+      .after('<span class="select">' + title + '</span>')
+      .change(function(){
+      val = $('option:selected',this).text();
+      $(this).next().text(val);
+      })
+    });
+}
+
+$(document).ready(function(){
+  chekBox();
+})
+</script>
+<script>
+$(document).on("change","input[type=checkbox]",function(){
+    var selectVal=$('[name="ClothesType"]:checked').val();
+    //console.log(selectVal);
+	   $(this).closest('li').toggleClass('active');
+	
+   
+});
+
+</script>
+<script>
+$(document).ready(function(){
+
+   $('.list_sec ul li').on('click', function(){
+
+    var getUK = $(this).attr("uk");
+
+    var getUKId = $(this).attr("ukID");
+
+    var getUKClass = $(this).attr("class");
+
+     if(getUKId='PreferedClothes') {
+
+            var getHdnVal = $("#"+getUKId+"HDN").val();
+
+            var existStr = getHdnVal.search(getUK);
+            
+            if(existStr=='-1') {
+
+              blankValStr = getHdnVal.concat(','+getUK);
+
+            } else {
+
+              var newStr = blankValStr.replace(","+getUK, " ");
+              blankValStr = newStr.trim();
+
+              var newStr1 = blankValStr.replace(getUK, " ");
+              blankValStr = newStr1.trim();
+
+            }
+
+          if(blankValStr.length > 0) {
+            var getComma = blankValStr.charAt(0);
+
+            if(getComma==',') {
+              blankValStr = blankValStr.slice(1);  
+            }
+           
+          }  
+
+          if(existStr!='-1') {
+                                    
+          }  
+          console.log(blankValStr);
+
+          $("#"+getUKId+"HDN").val(blankValStr);
+
+       }
+
+    $(this).toggleClass('active')
+
+  })
+$('.list_sec ul li').click(chekBox);
+})
+</script>
+<style>
+.list_sec{max-width:600px; width:100%; margin:0 auto;  float:left; margin-top:40px}
+.list_txt{float:left}
+.list_box{float:right}
+.list_sec ul{padding:0; list-style-type:none}
+.list_sec ul li{float:left; width:100%; padding:10px; border:1px solid #ccc; border-bottom:0}
+.list_sec ul li:last-child{border-bottom:1px solid #ccc}
+.list_sec ul li:hover{border:1px solid #ff009f}
+.list_sec ul li.active{background-color:#ff009f; color:#fff}
+.list_sec ul li.active .checkmark{border:1px solid #fff}
+.list_sec ul li.active .circle-color .checkmark:after{border-color:#fff}
+
+.circle-color {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    margin: 0;
+}
+.circle-color input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+.checkmark {
+    position: absolute;
+    border-radius: 2px;
+    top: 0;
+    right: 0;
+    height: 22px;
+    width: 22px;
+    border: 1px solid #b7b7b7;
+}
+.circle-color .checkmark:after {
+    border: solid #141313;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    height: 15px;
+    left: 6px;
+    top: 1px;
+    width: 8px;
+}
+.checkmark:after{content: "";
+    position: absolute;
+    display: none;}
+
+.circle-color input:checked ~ .checkmark:after {
+    display: block;
+}
+.list_sec ul li.active .circle-color .checkmark:after{display:block}
+.list_sec ul li .circle-color .checkmark:after{display:none}
+</style>
+
+   </body>
+</html>
